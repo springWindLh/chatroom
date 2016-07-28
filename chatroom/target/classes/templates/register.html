@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" ng-app="registerApp">
+<head>
+    <meta charset="UTF-8">
+    <title>register</title>
+    <style>
+        .registerOuter {
+            width: 0;
+            height: 0;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+        }
+
+        .registerForm {
+            width: 25em;
+            height: 40em;
+            margin-left: -15em;
+            margin-top: -20em;
+            padding: 1em;
+        }
+
+    </style>
+
+</head>
+<body>
+<div th:include="fragment::files"></div>
+<div class="registerOuter">
+    <div class="registerForm" ng-controller="registerController">
+        <form name="registerForm">
+            <fieldset class="form-group">
+                <i class="fa fa-male margin10"></i>
+                <label class="radio-inline">
+                    <input type="radio" name="sex" value="MAN" minlength="2" maxlength="20" ng-model="user.sex">男
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="sex" value="WOMAN" ng-model="user.sex">女
+                </label>
+            </fieldset>
+
+            <fieldset class="form-group"
+                      ng-class="{'has-error':registerForm.name.$dirty && registerForm.name.$invalid,'has-success':registerForm.name.$dirty && registerForm.name.$valid}">
+                <label ng-cloak class="control-label" ng-show="registerForm.name.$dirty && registerForm.name.$invalid">必须填写用户名，且长度为2~20位</label>
+                <div class="input-group">
+                    <label class="input-group-addon"><i class="fa fa-user"></i> </label>
+                    <input class="form-control" placeholder="用户名" type="text" name="name" required ng-minlength="2"
+                           ng-maxlength="20" ng-model="user.name">
+                </div>
+            </fieldset>
+
+            <fieldset class="form-group"
+                      ng-class="{'has-error':registerForm.password.$dirty && registerForm.password.$invalid,'has-success':registerForm.password.$dirty && registerForm.password.$valid}">
+                <label ng-cloak class="control-label"
+                       ng-show="registerForm.password.$dirty && registerForm.password.$invalid">必须填写密码，且长度为6~12位</label>
+                <div class="input-group">
+                    <label class="input-group-addon"><i class="fa fa-lock"></i> </label>
+                    <input class="form-control" placeholder="密码" type="password" name="password" required
+                           ng-minlength="6" ng-maxlength="12"
+                           ng-model="user.password">
+                </div>
+            </fieldset>
+
+            <fieldset class="form-group"
+                      ng-class="{'has-error':user.password != user.repeatPwd && registerForm.repeatPwd.$dirty,'has-success':user.password == user.repeatPwd && registerForm.repeatPwd.$dirty}">
+                <label ng-cloak class="control-label"
+                       ng-show="user.password != user.repeatPwd && registerForm.repeatPwd.$dirty">密码输入不一致</label>
+                <div class="input-group">
+                    <label class="input-group-addon"><i class="fa fa-lock"></i> </label>
+                    <input class="form-control" placeholder="重复密码" type="password" name="repeatPwd" required
+                           ng-model="user.repeatPwd">
+                </div>
+            </fieldset>
+
+            <fieldset class="form-group"
+                      ng-class="{'has-error':registerForm.email.$dirty && registerForm.email.$invalid,'has-success':registerForm.email.$dirty && registerForm.email.$valid}">
+                <label ng-cloak class="control-label" ng-show="registerForm.email.$dirty && registerForm.mail.$invalid">请填写正确的邮箱地址</label>
+                <div class="input-group">
+                    <label class="input-group-addon"><i class="fa fa-envelope"></i> </label>
+                    <input class="form-control" placeholder="邮箱，用于找回密码" type="email" name="email" required
+                           ng-model="user.email">
+                </div>
+            </fieldset>
+            <button type="button" ng-click="register()"
+                    ng-disabled="registerForm.$invalid || user.password != user.repeatPwd"
+                    class="btn btn-block btn-info-outline">注&nbsp;&nbsp;册
+            </button>
+
+            <div ng-cloak ng-show="registerSuccess" id="alertInfo" class="alert alert-dismissible fade in margin-top10" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                {{responseMsg}}
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    var app = angular.module('registerApp', []);
+    app.controller('registerController', function ($scope, $http) {
+        $scope.user = {
+            name: '',
+            password: '',
+            repeatPwd: '',
+            sex: 'MAN',
+            email: ''
+        };
+
+        $scope.registerSuccess = false;
+        function setResponseMsg(msg, isShow) {
+            $scope.responseMsg = msg;
+            $scope.registerSuccess = isShow;
+        }
+
+        $scope.register = function () {
+            $scope.registerSuccess = false;
+            $http.post('/user/register', $scope.user).success(function (data) {
+                if (data.code) {
+                    angular.element("#alertInfo").addClass("alert-success");
+                    setResponseMsg("注册成功！3秒后自动跳转……", true);
+                    setTimeout(function () {
+                        location.href = data.jumpUrl;
+                    }, 3000);
+                } else {
+                    angular.element("#alertInfo").addClass("alert-danger");
+                    setResponseMsg("注册失败！" + data.detail, true);
+                }
+            });
+        };
+    });
+</script>
+</body>
+</html>
