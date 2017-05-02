@@ -11,15 +11,22 @@ import org.springframework.stereotype.Controller;
  * Created by lh on 2016/7/6.
  */
 @Controller
+@MessageMapping("/message")
 public class MessageController {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    @MessageMapping("/message-center")
+    @MessageMapping("/room")
 //    @SendTo("/topic/notice")
-    public void messageHandler(String singleMessage) {
-        SingleMessage message = JSON.parseObject(singleMessage,SingleMessage.class);
-        messagingTemplate.convertAndSend("/topic/notice/" + message.getRoomId(), message.getContent());
+    public void roomMessageHandler(String singleMessage) {
+        SingleMessage message = JSON.parseObject(singleMessage, SingleMessage.class);
+        messagingTemplate.convertAndSend("/topic/room/" + message.getRoomId(), message.getContent());
+    }
+
+    @MessageMapping("/user")
+    public void userMessageHandler(String singleMessage) {
+        SingleMessage message = JSON.parseObject(singleMessage, SingleMessage.class);
+        messagingTemplate.convertAndSend("/topic/user/" + message.getRoomId(), message.getContent());
     }
 }

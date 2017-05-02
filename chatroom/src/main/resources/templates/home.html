@@ -41,7 +41,7 @@ home page
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             setConnected(true);
-            stompClient.subscribe('/topic/notice/579712f70cd2961960245c5e',function (data) {
+            stompClient.subscribe('/topic/message/room/579712f70cd2961960245c5e',function (data) {
                console.log(data);
             });
         });
@@ -54,14 +54,14 @@ home page
         setConnected(false);
         console.log("Disconnected");
     }
-    // 向‘/app/message-center’服务端发送消息
+    // 向‘/app/room’服务端发送消息
     function sendName() {
         var value = document.getElementById('name').value;
         var msg = {
             roomId:'579712f70cd2961960245c5e',
             content:value
         };
-        stompClient.send("/app/message-center", {}, JSON.stringify(msg));
+        stompClient.send("/app/room", {}, JSON.stringify(msg));
     }
     connect();
 

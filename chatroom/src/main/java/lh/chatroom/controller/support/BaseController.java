@@ -3,7 +3,6 @@ package lh.chatroom.controller.support;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 import lh.chatroom.domain.CurrentUser;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -42,7 +41,7 @@ public class BaseController {
     }
 
     protected CurrentUser getCurrentUser() {
-        return (CurrentUser) getRequest().getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+        return (CurrentUser) getRequest().getSession().getAttribute("user");
     }
 
     protected AjaxResponse getErrorInfo(BindingResult result, String errorMsg) {

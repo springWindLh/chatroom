@@ -6,12 +6,6 @@ import lh.chatroom.domain.User;
 import lh.chatroom.form.UserForm;
 import lh.chatroom.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,8 +23,6 @@ import javax.validation.Valid;
 public class UserController extends BaseController {
     @Autowired
     private IUserService userService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
@@ -62,17 +54,23 @@ public class UserController extends BaseController {
         }
     }
 
+    @RequestMapping(value = {"","/"})
+    public String home() {
+        return "home";
+    }
+
     private boolean authenticate(String name, String password) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(name, password);
-        try {
-            Authentication authentication = authenticationManager.authenticate(token);
-            //调用loadUserByUserName
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            getRequest().getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-            return true;
-        } catch (AuthenticationException e) {
-            return false;
-        }
+//        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(name, password);
+//        try {
+//            Authentication authentication = authenticationManager.authenticate(token);
+//            //调用loadUserByUserName
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//            getRequest().getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+//            return true;
+//        } catch (AuthenticationException e) {
+//            return false;
+//        }
+        return false;
     }
 
 }
