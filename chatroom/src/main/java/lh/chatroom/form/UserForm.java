@@ -3,6 +3,7 @@ package lh.chatroom.form;
 import com.google.common.base.Strings;
 import lh.chatroom.domain.User;
 import lh.chatroom.form.support.BaseForm;
+import lh.chatroom.util.Md5Util;
 
 import java.time.LocalDateTime;
 
@@ -81,13 +82,13 @@ public class UserForm extends BaseForm {
         if (!Strings.isNullOrEmpty(this.getId())) {
             user.setId(this.getId());
             if (!this.getPassword().equals(this.getOldPassword())) {
-              //  user.setPassword(new BCryptPasswordEncoder().encode(this.getPassword()));
+                user.setPassword(Md5Util.encrypt32(this.getPassword()));
             } else {
-               // user.setPassword(this.getPassword());
+                 user.setPassword(this.getPassword());
             }
             user.setModifyTime(LocalDateTime.now());
         } else {
-           // user.setPassword(new BCryptPasswordEncoder().encode(this.getPassword()));
+            user.setPassword(Md5Util.encrypt32(this.getPassword()));
         }
         user.setName(this.getName());
         user.setSex(User.Sex.valueOf(this.getSex()));
