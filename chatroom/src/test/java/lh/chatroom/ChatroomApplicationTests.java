@@ -49,10 +49,14 @@ public class ChatroomApplicationTests {
     @Test
     public void createUser() {
 //        System.out.println("hello");
-//        User user = new User();
-//        user.setName("小明");
-//        user.setSex(User.Sex.MAN);
-//        userService.create(user);
+        User user = new User();
+        user.setName("张三");
+        user.setSex(User.Sex.MAN);
+        userService.create(user);
+        User user2 = new User();
+        user2.setName("李四");
+        user2.setSex(User.Sex.MAN);
+        userService.create(user2);
 //        Role role = new Role();
 //        role.setName("角色1");
 //        role.setCode("role1");
@@ -65,8 +69,8 @@ public class ChatroomApplicationTests {
 //        member.setRole(role);
 //        memberService.create(member);
 //        room.setMembers(Lists.newArrayList(member));
-//        roomService.create(room);
-            roomService.getById("579712f70cd2961960245c5e");
+        roomService.create(room);
+//            roomService.getById("579712f70cd2961960245c5e");
 //        Optional<Room> roomOptional = roomService.getByName("room1");
 //        Optional<Member> memberOptional = memberService.getByUserId("578a06400cd29625a069bd22");
 

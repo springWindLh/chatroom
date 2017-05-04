@@ -41,8 +41,8 @@ home page
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             setConnected(true);
-            stompClient.subscribe('/topic/message/room/579712f70cd2961960245c5e',function (data) {
-               console.log(data);
+            stompClient.subscribe('/topic/message/room/590a928b107af41e38041216',function (data) {
+               console.log("msg:"+data.body);
             });
         });
     }
@@ -58,10 +58,10 @@ home page
     function sendName() {
         var value = document.getElementById('name').value;
         var msg = {
-            roomId:'579712f70cd2961960245c5e',
+            roomId:'590a928b107af41e38041216',
             content:value
         };
-        stompClient.send("/app/room", {}, JSON.stringify(msg));
+        stompClient.send("/app/message/room", {}, JSON.stringify(msg));
     }
     connect();
 

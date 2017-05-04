@@ -21,12 +21,12 @@ public class MessageController {
 //    @SendTo("/topic/notice")
     public void roomMessageHandler(String singleMessage) {
         SingleMessage message = JSON.parseObject(singleMessage, SingleMessage.class);
-        messagingTemplate.convertAndSend("/topic/room/" + message.getRoomId(), message.getContent());
+        messagingTemplate.convertAndSend("/topic/message/room/" + message.getRoomId(), message.getContent());
     }
 
-    @MessageMapping("/user")
+    @MessageMapping("/member")
     public void userMessageHandler(String singleMessage) {
         SingleMessage message = JSON.parseObject(singleMessage, SingleMessage.class);
-        messagingTemplate.convertAndSend("/topic/user/" + message.getRoomId(), message.getContent());
+        messagingTemplate.convertAndSend("/topic/message/member/" + message.getRoomId(), message.getContent());
     }
 }
